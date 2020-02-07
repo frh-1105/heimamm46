@@ -1,5 +1,5 @@
 <template>
-  
+  <router-link to="info">路由</router-link>
 </template>
 
 <script>
