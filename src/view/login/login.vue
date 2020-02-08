@@ -24,7 +24,7 @@
               <el-input placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="loginForm.loginCode"></el-input>
             </el-col>
             <el-col :span="7">
-              <img class="captcha" src alt />
+              <img class="captcha" src="../../assets/login_captcha.png" alt />
             </el-col>
           </el-row>
         </el-form-item>
