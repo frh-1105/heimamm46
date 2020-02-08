@@ -41,19 +41,24 @@
         </el-form-item>
         <el-form-item class="btn-box">
           <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-          <el-button type="primary">注册</el-button>
+          <el-button type="primary" @click="showDialog">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 右侧图片 -->
     <img src="../../assets/login_banner_ele.png" alt />
+    <registerDialog ref="registerDialog"></registerDialog>
   </div>
 </template>
 
 <script>
+import registerDialog from './components/registerDialog'
 export default {
   //组件名字
   name: "login",
+  components:{
+    registerDialog
+  },
   data() {
     return {
       loginForm: {
@@ -83,6 +88,9 @@ export default {
           this.$message.error("验证失败")
         }
       })
+    },
+    showDialog(){
+      this.$refs.registerDialog.dialogFormVisible = true;
     }
   }
 };
