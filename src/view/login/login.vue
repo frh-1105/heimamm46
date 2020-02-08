@@ -21,7 +21,11 @@
         <el-form-item>
           <el-row>
             <el-col :span="17">
-              <el-input placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="loginForm.loginCode"></el-input>
+              <el-input
+                placeholder="请输入验证码"
+                prefix-icon="el-icon-key"
+                v-model="loginForm.loginCode"
+              ></el-input>
             </el-col>
             <el-col :span="7">
               <img class="captcha" src="../../assets/login_captcha.png" alt />
@@ -29,10 +33,9 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="loginForm.isChecked" label="我已同意并阅读">
-            <span>我已同意并阅读</span>
-            <el-link type="primary">用户协议</el-link>
-            <span>和</span>
+          <el-checkbox v-model="loginForm.isChecked">
+            我已同意并阅读
+            <el-link type="primary">用户协议</el-link>和
             <el-link type="primary">隐私条款</el-link>
           </el-checkbox>
         </el-form-item>
@@ -57,7 +60,7 @@ export default {
         phone: "",
         password: "",
         loginCode: "",
-        isChecked:false
+        isChecked: false
       }
     };
   }
@@ -115,6 +118,13 @@ export default {
           margin-bottom: 28px;
         }
       }
+    }
+  }
+  .el-checkbox {
+    display: flex;
+    align-items: center;
+    .el-checkbox__label {
+      display: flex;
     }
   }
 }
