@@ -11,12 +11,18 @@
         <span class="sub-title">用户登录</span>
       </div>
       <!-- 登录表单 -->
-      <el-form ref="loginForm" :rules="rules" :model="loginForm" label-width="43px" class="login-form">
+      <el-form
+        ref="loginForm"
+        :rules="rules"
+        :model="loginForm"
+        label-width="43px"
+        class="login-form"
+      >
         <el-form-item prop="phone">
           <el-input placeholder="请输入手机号码" prefix-icon="el-icon-user" v-model="loginForm.phone"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="loginForm.password"></el-input>
+          <el-input show-password placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="loginForm.password"></el-input>
         </el-form-item>
         <el-form-item prop="loginCode">
           <el-row>
@@ -52,12 +58,14 @@
 </template>
 
 <script>
-import registerDialog from './components/registerDialog'
-import {checkPhone} from '@/utils/vaildator.js'
+import registerDialog from "./components/registerDialog";
+import { checkPhone } from "@/utils/vaildator.js";
+import { login } from "@/api/login.js";
+import {setToken} from '@/utils/token.js'
 export default {
   //组件名字
   name: "login",
-  components:{
+  components: {
     registerDialog
   },
   data() {
@@ -68,38 +76,56 @@ export default {
         loginCode: "",
         isChecked: false
       },
-      rules:{
-        phone:[
-          {required:true,message:"手机号码不能为空",trigger:"blur"},
-          {validator:checkPhone,trigger:"change"}
+      rules: {
+        phone: [
+          { required: true, message: "手机号码不能为空", trigger: "blur" },
+          { validator: checkPhone, trigger: "change" }
         ],
-        password:[
-          {required:true,message:"密码不能为空",trigger:"blur"},
-          {min:6,max:12,message:"密码长度为6-12位",trigger:"blur"}
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 12, message: "密码长度为6-12位", trigger: "blur" }
         ],
-        loginCode:[
-          {required:true,message:"验证码不能为空",trigger:"blur"},
-          {min:4,max:4,message:"验证码长度为4位",trigger:"blur"}
+        loginCode: [
+          { required: true, message: "验证码不能为空", trigger: "blur" },
+          { min: 4, max: 4, message: "验证码长度为4位", trigger: "blur" }
         ]
       },
-      captchaUrl:process.env.VUE_APP_URL+"/captcha?type=login",
+      captchaUrl: process.env.VUE_APP_URL + "/captcha?type=login"
     };
   },
-  methods:{
-    submitForm(formName){
-      this.$refs[formName].validate(valid=>{
-        if(valid){
-          this.$message.success("验证成功");
-        }else{
-          this.$message.error("验证失败")
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //验证正确
+          if (this.loginForm.isChecked != true) {
+            return this.$message.warning("请勾选用户协议");
+          }
+          login({
+            phone: this.loginForm.phone,
+            password: this.loginForm.password,
+            code: this.loginForm.loginCode
+          }).then(res => {
+            // window.console.log(res);
+            if(res.data.code == 200){
+              this.$message.success("登录成功");
+              this.$router.push("/index");
+              setToken(res.data.data.token);
+            }else if(res.data.code == 202){
+              this.$message.error(res.data.message)
+            }
+          });
+        } else {
+          this.$message.error("验证失败");
         }
-      })
+      });
     },
-    showDialog(){
+    showDialog() {
       this.$refs.registerDialog.dialogFormVisible = true;
     },
-    changeCaptcha(){
-      this.captchaUrl = process.env.VUE_APP_URL+"/captcha?type=login&t="+Date.now()
+    changeCaptcha() {
+      this.captchaUrl =
+        process.env.VUE_APP_URL + "/captcha?type=login&t=" + Date.now();
     }
   }
 };

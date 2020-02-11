@@ -7,7 +7,7 @@ const loginRequest = axios.create({
 //用户登录接口
 export function login(data) {
     return loginRequest({
-        url: "/register",
+        url: "/login",
         method: "post",
         data,
     })
