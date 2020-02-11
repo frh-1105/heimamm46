@@ -53,6 +53,7 @@
 
 <script>
 import registerDialog from './components/registerDialog'
+import {checkPhone} from '@/utils/vaildator.js'
 export default {
   //组件名字
   name: "login",
@@ -68,6 +69,10 @@ export default {
         isChecked: false
       },
       rules:{
+        phone:[
+          {required:true,message:"手机号码不能为空",trigger:"blur"},
+          {validator:checkPhone,trigger:"change"}
+        ],
         password:[
           {required:true,message:"密码不能为空",trigger:"blur"},
           {min:6,max:12,message:"密码长度为6-12位",trigger:"blur"}
