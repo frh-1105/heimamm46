@@ -28,7 +28,7 @@
               ></el-input>
             </el-col>
             <el-col :span="7">
-              <img class="captcha" src="../../assets/login_captcha.png" alt />
+              <img class="captcha" @click="changeCaptcha" :src="captchaUrl" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -81,7 +81,8 @@ export default {
           {required:true,message:"验证码不能为空",trigger:"blur"},
           {min:4,max:4,message:"验证码长度为4位",trigger:"blur"}
         ]
-      }
+      },
+      captchaUrl:process.env.VUE_APP_URL+"/captcha?type=login",
     };
   },
   methods:{
@@ -96,6 +97,9 @@ export default {
     },
     showDialog(){
       this.$refs.registerDialog.dialogFormVisible = true;
+    },
+    changeCaptcha(){
+      this.captchaUrl = process.env.VUE_APP_URL+"/captcha?type=login&t="+Date.now()
     }
   }
 };
